@@ -7,12 +7,12 @@ ___Hyprland dots___ – Wallpaper-driven dynamic theming.
 
 # How to install:
 
-* clone this repository
-  * cd into the clone of this repository
-    * chmod the install_script and run it
+* Clone this repository.
+  * CD into the clone of this repository.
+    * chmod +x the install_script and ./run it
 
-* download the wallpaper archive from the link and extract
-  * place the extracted folder in ~/Pictures
+* Download the wallpaper archive from the link and extract.
+  * Place the extracted folder in ~/Pictures, it must be named "Wallpapers"
       
 
 
