@@ -5,7 +5,7 @@ ___Hyprland dots___ – Wallpaper-driven dynamic theming.
 
 ## IMPORTANT: Please back-up your current configuration before installing mine.
 
-### Link: https://file.pizza/download/shrimp/tomatoes/artichoke/romano
+### Link: https://drive.google.com/file/d/15Xsu7S7XPHIidaQNKvhZfngtNQLUtGcB/view?usp=drive_link
 
 # How to install:
 
