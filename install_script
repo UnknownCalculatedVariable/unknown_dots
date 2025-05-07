@@ -1,0 +1,103 @@
+#!/bin/bash
+
+# Improved Arch Linux configuration replication script
+set -euo pipefail  # Exit on error, unset variables, and pipe failures
+
+# Function to display error messages
+error() {
+    echo -e "\033[1;31m[ERROR]\033[0m $1" >&2
+    exit 1
+}
+
+# Function to display success messages
+success() {
+    echo -e "\033[1;32m[SUCCESS]\033[0m $1"
+}
+
+# Function to check if command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+
+# Install packages
+echo "Installing packages..."
+sudo pacman -S --needed --noconfirm \
+    age alacritty ark  bind blueman bluez-utils \
+    brightnessctl dolphin efibootmgr \
+    fastfetch flatpak fwupd git grim grub gst-libav gst-plugin-pipewire \
+    gst-plugins-bad gst-plugins-good gst-plugins-ugly gwenview hyprland \
+    hyprlock inotify-tools kitty kvantum \
+    lxappearance man-db networkmanager nss-mdns \
+    pavucontrol pipewire-pulse \
+    power-profiles-daemon python-blessed python-pip python-pywal \
+    python-qt-material qt5ct reflector rofi sddm slurp sudo swww \
+    usbutils vim rsync vlc \
+    waybar wf-recorder || error "Failed to install packages"
+
+# Install yay if not already installed
+if ! command_exists yay; then
+    echo "Installing yay..."
+    temp_dir=$(mktemp -d)
+    git clone https://aur.archlinux.org/yay.git "$temp_dir" || error "Failed to clone yay repository"
+    cd "$temp_dir" || error "Failed to enter yay directory"
+    makepkg -si --noconfirm || error "Failed to install yay"
+    cd || error "Failed to return to home directory"
+    rm -rf "$temp_dir" || error "Failed to remove temporary yay directory"
+fi
+
+# Clone configuration repository
+echo "Cloning configuration repository..."
+config_repo="$HOME/test"
+if [ ! -d "$config_repo" ]; then
+    git clone https://github.com/UnknownCalculatedVariable/bckp.git "$config_repo" || error "Failed to clone configuration repository"
+else
+    echo "Configuration repository already exists, skipping clone"
+fi
+
+# Set up wallpapers
+echo "Setting up wallpapers..."
+wallpapers_dir="$HOME/Pictures/Wallpapers"
+mkdir -p "$wallpapers_dir" || error "Failed to create wallpapers directory"
+cp -r "$config_repo/flexrice/wallpapers/"* "$wallpapers_dir" || error "Failed to copy wallpapers"
+
+# Backup existing config
+echo "Backing up existing configuration..."
+backup_dir="$HOME/Backups_flex"
+mkdir -p "$backup_dir" || error "Failed to create backup directory"
+
+if [ -d "$HOME/.config" ]; then
+    backup_time=$(date +"%Y%m%d_%H%M%S")
+    rsync -a "$HOME/.config/" "$backup_dir/config_$backup_time" || error "Failed to backup .config directory"
+fi
+
+# Install new config
+echo "Installing new configuration..."
+if [ -d "$config_repo/flexrice/config" ]; then
+    mkdir -p "$HOME/.config" || error "Failed to create .config directory"
+    rsync -a "$config_repo/flexrice/config/" "$HOME/.config/" || error "Failed to copy new configuration"
+else
+    error "Configuration directory not found in repository"
+fi
+
+# Install scripts
+echo "Installing scripts..."
+local_bin="$HOME/.local/bin"
+mkdir -p "$local_bin" || error "Failed to create .local/bin directory"
+
+if [ -d "$config_repo/flexrice/scripts" ]; then
+    rsync -a "$config_repo/flexrice/scripts/" "$local_bin/" || error "Failed to copy scripts"
+    chmod +x "$local_bin"/* || error "Failed to make scripts executable"
+else
+    error "Scripts directory not found in repository"
+fi
+
+# Final steps
+echo "Setting up permissions..."
+sudo chown -R "$USER:$USER" "$HOME/.config" "$HOME/.local" || error "Failed to set permissions"
+
+success "Installation and configuration complete!"
+echo "You may need to:"
+echo "1. Configure your display manager (lightdm or sddm)"
+echo "2. Reboot your system"
+echo "3. Select your preferred desktop environment (Hyprland or Plasma)"
