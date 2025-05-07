@@ -1,0 +1,105 @@
+@import "/home/zero/.cache/wal/colors-waybar.css";
+
+* {
+    border: none;
+    font-family: "Hack", "Font Awesome 6 Free";
+    font-size: 14.5px;
+    font-weight: 500;
+}
+
+window#waybar {
+    background-color: transparent;
+    color: @foreground;
+    border-bottom: 0;
+}
+
+/* Workspaces with rounded corners */
+#workspaces button {
+    padding: 0 12px;
+    color: @color0;
+    background: @foreground;
+    border-radius: 8px;
+    margin: 0 2px;
+    transition: all 0.2s ease;
+}
+
+#workspaces button.active {
+    color: @color0;
+    background: @foreground;
+    border-radius: 8px;
+}
+
+#workspaces button.urgent {
+    color: @foreground;
+    background: @color0;
+    border-radius: 8px;
+}
+
+/* Window module with rounded corners */
+#window {
+    color: @color0;
+    padding: 0 16px;
+    background: linear-gradient(to left, @color2, @foreground);
+    border-radius: 8px;
+    margin: 0 4px;
+}
+
+/* Clock with rounded corners */
+#clock {
+    background: @color2;
+    padding: 0 16px;
+    border-radius: 8px;
+    color: @color0;
+}
+
+/* Right-side modules with rounded corners */
+#pulseaudio {
+    padding: 0 14px;
+    background: linear-gradient(to right, @color2, @foreground);;
+    border-radius: 8px;
+    color: @color0;
+}
+#network, 
+#cpu, 
+#memory, 
+#battery {
+    padding: 0 14px;
+    background: @foreground;
+    margin: 0 2px;
+    border-radius: 8px;
+    color: @color0;
+}
+
+#pulseaudio.muted {
+    background: @color0;
+}
+
+#network.disconnected {
+    background: @color0;
+}
+
+#battery.critical {
+    background: @color9;
+    animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.3; }
+}
+
+/* Tray with rounded corners */
+#tray {
+    background: transparent;
+    padding: 0 14px;
+    margin-left: 6px;
+    border-radius: 8px;
+}
+
+/* Tooltip with rounded corners */
+tooltip {
+    background: transparent;
+    border: 1px solid @color1;
+    color: @foreground;
+    border-radius: 8px;
+    padding: 8px;
+}

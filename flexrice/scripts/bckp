@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Define base directory
+BASE_DIR=~/unknown_dots/flexrice
+
+# Create target directories
+mkdir -p "$BASE_DIR"
+
+# Copy selected .config directories into 'config'
+mkdir -p "$BASE_DIR/config"
+for dir in rofi wal swww waybar alacritty; do
+    SRC="$HOME/.config/$dir"
+    if [ -d "$SRC" ]; then
+        cp -r "$SRC" "$BASE_DIR/config/"
+    else
+        echo "Warning: $SRC does not exist and will be skipped."
+    fi
+done
+
+# Copy ~/.local/bin into 'scripts'
+SRC_BIN="$HOME/.local/bin"
+if [ -d "$SRC_BIN" ]; then
+    mkdir -p "$BASE_DIR/scripts"
+    cp -r "$SRC_BIN"/* "$BASE_DIR/scripts/"
+else
+    echo "Warning: $SRC_BIN does not exist and will be skipped."
+fi
+
+# Copy ~/Pictures/Wallpapers into 'wallpapers'
+SRC_WP="$HOME/Pictures/Wallpapers"
+if [ -d "$SRC_WP" ]; then
+    mkdir -p "$BASE_DIR/wallpapers"
+    cp -r "$SRC_WP"/* "$BASE_DIR/wallpapers/"
+else
+    echo "Warning: $SRC_WP does not exist and will be skipped."
+fi
+
+echo "Done! Your rice has been backed up to $BASE_DIR"
+
+alacritty -e Templates/git

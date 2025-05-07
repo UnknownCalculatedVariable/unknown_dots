@@ -1,0 +1,115 @@
+#!/bin/bash
+
+# Configuration
+WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
+CACHE_FILE="$HOME/.cache/wallpaper_index.txt"
+ROFI_CONFIG="$HOME/.config/rofi/config.rasi"
+THUMBNAIL_DIR="$HOME/.cache/wallpaper-thumbs"
+THUMBNAIL_SIZE="200x200"  # Slightly smaller thumbnails for a smaller window
+GRID_ROWS=2
+GRID_COLS=4  # More columns, fewer rows = smaller height
+
+# Ensure ImageMagick is installed
+command -v convert >/dev/null || {
+    echo "ImageMagick 'convert' is not installed."
+    exit 1
+}
+
+# Create thumbnail directory if it doesn't exist
+mkdir -p "$THUMBNAIL_DIR"
+
+# Function to generate or get square thumbnail path
+get_thumbnail() {
+    local wallpaper="$1"
+    local thumb_name="$(echo "$wallpaper" | md5sum | cut -d ' ' -f1).jpg"
+    local thumb_path="$THUMBNAIL_DIR/$thumb_name"
+
+    if [[ ! -f "$thumb_path" ]]; then
+        convert "$wallpaper" -thumbnail "${THUMBNAIL_SIZE}^" -gravity center -extent "$THUMBNAIL_SIZE" "$thumb_path"
+    fi
+
+    echo "$thumb_path"
+}
+
+# Function to show folder selection
+select_folder() {
+    declare -a folders=("All Wallpapers")
+    while IFS= read -r -d $'\0' folder; do
+        folders+=("$(basename "$folder")")
+    done < <(find "$WALLPAPER_DIR" -mindepth 1 -maxdepth 1 -type d -print0 | sort -z)
+
+    printf "%s\n" "${folders[@]}" | rofi \
+        -dmenu \
+        -p "󰉏 Wallpaper Folder" \
+        -config "$ROFI_CONFIG"
+}
+
+# Function to show wallpaper selection from a folder with thumbnails only in grid
+select_wallpaper() {
+    local folder="$1"
+    declare -a WALLPAPER_PATHS=()
+    declare -a ROFI_LINES=()
+
+    if [[ "$folder" == "All Wallpapers" ]]; then
+        mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" \) -print0 | sort -z)
+    else
+        mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR/$folder" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" \) -print0 | sort -z)
+    fi
+
+    CURRENT_INDEX=0
+    [[ -f "$CACHE_FILE" ]] && CURRENT_INDEX=$(<"$CACHE_FILE")
+
+    for i in "${!WALLPAPER_PATHS[@]}"; do
+        thumb=$(get_thumbnail "${WALLPAPER_PATHS[$i]}")
+        ROFI_LINES+=("$i\x00icon\x1f$thumb")
+    done
+
+    selected_index=$(printf "%b\n" "${ROFI_LINES[@]}" | rofi \
+        -dmenu \
+        -selected-row "$CURRENT_INDEX" \
+        -show-icons \
+        -theme-str 'entry { enabled: false; }' \
+        -theme-str 'listview { lines: '$GRID_ROWS'; columns: '$GRID_COLS'; }' \
+        -theme-str 'element { orientation: vertical; children: [ element-icon ]; }' \
+        -theme-str 'element-icon { size: 200px; border-radius: 5px; }' \
+        -kb-row-up "Up" \
+        -kb-row-down "Down" \
+        -kb-accept "Return" \
+        -p "󰉏 Wallpaper ($folder)" \
+        -config "$ROFI_CONFIG")
+
+    echo "$selected_index"
+}
+
+# Main execution
+SELECTED_FOLDER=$(select_folder)
+[[ -z "$SELECTED_FOLDER" ]] && exit 0
+
+SELECTED_INDEX=$(select_wallpaper "$SELECTED_FOLDER")
+[[ -z "$SELECTED_INDEX" ]] && exit 0
+
+# Get the wallpaper list again and apply the one at selected index
+if [[ "$SELECTED_FOLDER" == "All Wallpapers" ]]; then
+    mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" \) -print0 | sort -z)
+else
+    mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR/$SELECTED_FOLDER" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" \) -print0 | sort -z)
+fi
+
+selected_wallpaper="${WALLPAPER_PATHS[$SELECTED_INDEX]}"
+[[ -z "$selected_wallpaper" ]] && echo "No wallpaper selected or index invalid" >&2 && exit 1
+
+# Apply the wallpaper with sweeping diagonal transition
+if [[ -f "$selected_wallpaper" ]]; then
+    echo "$SELECTED_INDEX" > "$CACHE_FILE"
+
+    swww img "$selected_wallpaper" \
+        --transition-type wipe \
+        --transition-angle 45 \
+        --transition-pos "$(hyprctl cursorpos)" \
+        --transition-fps 60 \
+        --transition-step 90
+
+    wal -i "$selected_wallpaper"
+    killall waybar
+    waybar &
+fi

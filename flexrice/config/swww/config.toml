@@ -1,0 +1,5 @@
+[options]
+transition_step = 90
+transition_type = "wipe"
+transition_angle = 30
+transition_pos = "bottom-right"

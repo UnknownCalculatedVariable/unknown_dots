@@ -1,0 +1,67 @@
+[general]
+import = ["~/.config/alacritty/colors.toml"]
+live_config_reload = true
+# ===== Window Configuration =====
+[window]
+# Window dimensions (columns x rows)
+dimensions = { columns = 120, lines = 30 }
+
+# Window position (optional)
+position = { x = 100, y = 100 }
+
+# Padding (space between text and window border)
+padding = { x = 5, y = 5 }
+
+# Startup mode (options: Windowed, Maximized, Fullscreen)
+startup_mode = "Windowed"
+
+# Window decorations (options: Full, None, Transparent, Buttonless)
+decorations = "Full"
+
+# Dynamic title (shows current command)
+dynamic_title = true
+
+# Background opacity (0.0 transparent - 1.0 opaque)
+opacity = 0.9
+
+# ===== Scrolling =====
+[scrolling]
+# Number of lines to scroll at a time
+history = 10000
+
+# Multiplier for scrolling speed
+multiplier = 3
+
+# ===== Font Configuration =====
+[font]
+# Default font family
+normal = { family = "Hack", style = "Regular" }
+bold = { family = "Hack", style = "Bold" }
+italic = { family = "Hack", style = "Italic" }
+
+# Font size (adjust as needed)
+size = 12.0
+
+# Offset between glyphs (adjust if letters overlap)
+glyph_offset = { x = 0, y = 0 }
+
+# ===== Mouse Bindings =====
+[mouse]
+hide_when_typing = false
+
+# ===== Selection =====
+[selection]
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+save_to_clipboard = true
+
+# ===== Bell (Audible/Visual Alert) =====
+[bell]
+animation = "EaseOutExpo"
+duration = 0
+color = "#ffffff"
+
+# ===== Terminal =====
+[terminal]
+# Shell to use (default: system login shell)
+shell = { program = "/bin/bash", args = ["--login"] }
+
