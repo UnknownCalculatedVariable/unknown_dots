@@ -1,2 +1,2 @@
 # unknown_dots
-Hyprland dots – Wallpaper-driven dynamic theming.
+___Hyprland dots___ – Wallpaper-driven dynamic theming.
