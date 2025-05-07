@@ -1,7 +1,7 @@
 # Hyprland Configuration /w Arch
 ___Hyprland dots___ – Wallpaper-driven dynamic theming.
 
-## Wallpapers not provided with the repository due to large size, download link should be used to download the wallpapers.
+## Wallpapers not provided with the repository due to the large file size, download link should be used to download the wallpapers.
 
 ## IMPORTANT: Please back-up your current configuration before installing mine.
 
