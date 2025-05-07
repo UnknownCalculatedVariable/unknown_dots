@@ -27,13 +27,15 @@ else
 fi
 
 # Copy ~/Pictures/Wallpapers into 'wallpapers'
-SRC_WP="$HOME/Pictures/Wallpapers"
-if [ -d "$SRC_WP" ]; then
-    mkdir -p "$BASE_DIR/wallpapers"
-    cp -r "$SRC_WP"/* "$BASE_DIR/wallpapers/"
-else
-    echo "Warning: $SRC_WP does not exist and will be skipped."
-fi
+#
+#SRC_WP="$HOME/Pictures/Wallpapers"
+#if [ -d "$SRC_WP" ]; then
+#    mkdir -p "$BASE_DIR/wallpapers"
+#    cp -r "$SRC_WP"/* "$BASE_DIR/wallpapers/"
+#else
+#    echo "Warning: $SRC_WP does not exist and will be skipped."
+#fi
+
 
 echo "Done! Your rice has been backed up to $BASE_DIR"
 
