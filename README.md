@@ -10,6 +10,9 @@ ___Hyprland dots___ – Wallpaper-driven dynamic theming.
 * clone this repository
   * cd into the clone of this repository
     * chmod the install_script and run it
+
+* download the wallpaper archive from the link and extract
+  * place the extracted folder in ~/Pictures
       
 
 
