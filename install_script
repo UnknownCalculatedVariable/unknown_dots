@@ -19,11 +19,10 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-
 # Install packages
 echo "Installing packages..."
 sudo pacman -S --needed --noconfirm \
-    age alacritty ark  bind blueman bluez-utils \
+    age alacritty ark bind blueman bluez-utils \
     brightnessctl dolphin efibootmgr \
     fastfetch flatpak fwupd git grim grub gst-libav gst-plugin-pipewire \
     gst-plugins-bad gst-plugins-good gst-plugins-ugly gwenview hyprland \
@@ -71,14 +70,18 @@ if [ -d "$HOME/.config" ]; then
     rsync -a "$HOME/.config/" "$backup_dir/config_$backup_time" || error "Failed to backup .config directory"
 fi
 
-# Install new config
-echo "Installing new configuration..."
-if [ -d "$config_repo/flexrice/config" ]; then
-    mkdir -p "$HOME/.config" || error "Failed to create .config directory"
-    rsync -a "$config_repo/flexrice/config/" "$HOME/.config/" || error "Failed to copy new configuration"
-else
-    error "Configuration directory not found in repository"
-fi
+# Install new config (only specific folders)
+echo "Installing selected configuration folders..."
+config_folders=("alacritty" "hypr" "rofi" "swww" "wal" "waybar")
+mkdir -p "$HOME/.config" || error "Failed to create .config directory"
+
+for folder in "${config_folders[@]}"; do
+    if [ -d "$config_repo/flexrice/config/$folder" ]; then
+        rsync -a "$config_repo/flexrice/config/$folder/" "$HOME/.config/$folder/" || error "Failed to copy $folder configuration"
+    else
+        echo "Warning: $folder configuration not found in repository"
+    fi
+done
 
 # Install scripts
 echo "Installing scripts..."
