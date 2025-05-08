@@ -26,3 +26,4 @@ else
     echo "Warning: $SRC_BIN does not exist and will be skipped."
 fi
 
+alacritty -e Templates/git
