@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if pidof gammastep >/dev/null; then
+    killall gammastep
+    notify-send "Gammastep" "Blue light filter OFF"
+else
+    gammastep -O 3500 &
+    notify-send "Gammastep" "Blue light filter ON (3500K)"
+fi
