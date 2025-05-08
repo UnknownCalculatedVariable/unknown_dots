@@ -8,7 +8,7 @@ mkdir -p "$BASE_DIR"
 
 # Copy selected .config directories into 'config'
 mkdir -p "$BASE_DIR/config"
-for dir in rofi wal swww waybar alacritty; do
+for dir in rofi wal swww waybar hypr alacritty; do
     SRC="$HOME/.config/$dir"
     if [ -d "$SRC" ]; then
         cp -r "$SRC" "$BASE_DIR/config/"
