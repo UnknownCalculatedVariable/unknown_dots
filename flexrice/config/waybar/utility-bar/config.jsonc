@@ -32,7 +32,7 @@
     "custom/Update":
     {
         "format": "",
-        "on-click": "sudo pacman -Syu; read -p 'Press enter to close'"
+        "on-click": "alacritty -e sudo pacman -Syu"
 
     },
     
@@ -81,7 +81,7 @@
     "custom/update-db":
     {
         "format": "",
-        "on-click": "alacritty -e bash -c distrobox-upgrade -a"
+        "on-click": "alacritty -e distrobox-upgrade -a"
     }
 
 
