@@ -8,18 +8,20 @@
     [
         "custom/power",
         "custom/Update",
+        "custom/update-db",
         "custom/upload-git",
+        "power-profiles-daemon"
     ],
 
     "modules-center": 
     [
-        "cpu",
-        "memory"
+        
     ],
 
     "modules-right":
     [
-        "power-profiles-daemon"
+        "cpu",
+        "memory"
 
     ],
 
@@ -37,7 +39,7 @@
     "custom/power":
     {
         "format": "",
-        "on-click": "systemctl poweroff"
+        "on-click": "wlogout"
     },
 
     "power-profiles-daemon": 
@@ -70,10 +72,18 @@
 
     "custom/upload-git":
     {
-        "format": "",
+        "format": "",
         "on-click": "alacritty -e bash -c ~/.local/bin/bckp; read -p 'Press enter to close...'"
 
+    },
+
+
+    "custom/update-db":
+    {
+        "format": "",
+        "on-click": "alacritty -e bash -c distrobox-upgrade -a"
     }
+
 
    
 }

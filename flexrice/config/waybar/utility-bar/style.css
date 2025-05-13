@@ -96,3 +96,11 @@ window#waybar
     border-radius: 12px;
     padding: 0 12px
 }
+
+#custom-update-db
+{
+    background-color: @foreground;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0 12px
+}
