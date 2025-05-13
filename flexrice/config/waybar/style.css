@@ -72,6 +72,13 @@ window#waybar {
     background: @color1;
 }
 
+#bluetooth {
+    background: @foreground;
+    border-radius: 12px;
+    padding: 0 12px;
+    color: #000000;
+}
+
 #pulseaudio.muted, #network.disconnected {
     background: @color0;
     color: @foreground;

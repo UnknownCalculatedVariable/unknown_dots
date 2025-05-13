@@ -31,14 +31,8 @@ chosen=$(printf '%s\n' "${options[@]}" | rofi_cmd)
 
 # Handle selection
 case "$chosen" in
-    "  Power Off")
-        systemctl poweroff
-        ;;
     "  Restart")
         systemctl reboot
-        ;;
-    "  Update System")
-        alacritty -e bash -c "sudo pacman -Syu; read -p 'Press enter to close...'"
         ;;
     "  Update Distrobox")
         alacritty -e bash -c "distrobox-upgrade -a"
@@ -46,22 +40,6 @@ case "$chosen" in
     "  Backup")
         alacritty -e bash -c "~/.local/bin/bckp; read -p 'Press enter to close...'"
         ;;
-    "  Power Profile: "*)
-        # Get current profile and toggle to next one
-        current=$(powerprofilesctl get)
-        case "$current" in
-            "power-saver")
-                new_profile="balanced"
-                ;;
-            "balanced")
-                new_profile="performance"
-                ;;
-            "performance")
-                new_profile="power-saver"
-                ;;
-            *)
-                new_profile="balanced"
-                ;;
         esac
         powerprofilesctl set "$new_profile"
         # Relaunch the script to show updated profile

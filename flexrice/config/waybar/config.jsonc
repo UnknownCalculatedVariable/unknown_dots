@@ -1,11 +1,11 @@
 {
-    "layer": "top",
-    "position": "top",
+    "layer": "bottom",
+    "position": "bottom",
     "height": 30,
     "spacing": 4,
     "modules-left": ["clock"],
     "modules-center": ["hyprland/workspaces"],
-    "modules-right": [ "pulseaudio", "network", "power"],
+    "modules-right": [ "pulseaudio", "network", "power", "bluetooth"],
     
     "hyprland/workspaces": {
         "format": "{icon}",
@@ -37,7 +37,6 @@
     
     "pulseaudio": {
         "format": "{icon} {volume}%",
-        "format-bluetooth": "{icon} {volume}%",
         "format-muted": " Muted",
         "format-icons": {
             "headphone": "",
@@ -57,6 +56,11 @@
         "format-disconnected": " Disconnected",
         "tooltip-format": "{ifname}: {ipaddr}/{cidr}",
         "on-click": "nm-connection-editor"
+    },
+
+    "bluetooth": {
+        "format": "",
+        "on-click": "blueman-manager"
     },
     
     "power": {
