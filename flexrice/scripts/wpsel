@@ -5,17 +5,15 @@ WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
 CACHE_FILE="$HOME/.cache/wallpaper_index.txt"
 ROFI_CONFIG="$HOME/.config/rofi/config.rasi"
 THUMBNAIL_DIR="$HOME/.cache/wallpaper-thumbs"
-THUMBNAIL_SIZE="200x200"  # Slightly smaller thumbnails for a smaller window
+THUMBNAIL_SIZE="200x200"
 GRID_ROWS=2
-GRID_COLS=4  # More columns, fewer rows = smaller height
+GRID_COLS=4
 
-# Ensure ImageMagick is installed
-command -v convert >/dev/null || {
-    echo "ImageMagick 'convert' is not installed."
-    exit 1
-}
+# Ensure dependencies are installed
+command -v convert >/dev/null || { echo "ImageMagick 'convert' is not installed."; exit 1; }
+command -v swww >/dev/null || { echo "swww is not installed."; exit 1; }
 
-# Create thumbnail directory if it doesn't exist
+# Create directories if they don't exist
 mkdir -p "$THUMBNAIL_DIR"
 
 # Function to generate or get square thumbnail path
@@ -25,7 +23,11 @@ get_thumbnail() {
     local thumb_path="$THUMBNAIL_DIR/$thumb_name"
 
     if [[ ! -f "$thumb_path" ]]; then
-        convert "$wallpaper" -thumbnail "${THUMBNAIL_SIZE}^" -gravity center -extent "$THUMBNAIL_SIZE" "$thumb_path"
+        if [[ "$wallpaper" == *.gif ]]; then
+            convert "$wallpaper[0]" -thumbnail "${THUMBNAIL_SIZE}^" -gravity center -extent "$THUMBNAIL_SIZE" "$thumb_path"
+        else
+            convert "$wallpaper" -thumbnail "${THUMBNAIL_SIZE}^" -gravity center -extent "$THUMBNAIL_SIZE" "$thumb_path"
+        fi
     fi
 
     echo "$thumb_path"
@@ -44,16 +46,16 @@ select_folder() {
         -config "$ROFI_CONFIG"
 }
 
-# Function to show wallpaper selection from a folder with thumbnails only in grid
+# Function to show wallpaper selection from a folder with thumbnails
 select_wallpaper() {
     local folder="$1"
     declare -a WALLPAPER_PATHS=()
     declare -a ROFI_LINES=()
 
     if [[ "$folder" == "All Wallpapers" ]]; then
-        mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" \) -print0 | sort -z)
+        mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.gif" \) -print0 | sort -z)
     else
-        mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR/$folder" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" \) -print0 | sort -z)
+        mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR/$folder" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.gif" \) -print0 | sort -z)
     fi
 
     CURRENT_INDEX=0
@@ -88,29 +90,41 @@ SELECTED_FOLDER=$(select_folder)
 SELECTED_INDEX=$(select_wallpaper "$SELECTED_FOLDER")
 [[ -z "$SELECTED_INDEX" ]] && exit 0
 
-# Get the wallpaper list again and apply the one at selected index
+# Get the wallpaper list again
 if [[ "$SELECTED_FOLDER" == "All Wallpapers" ]]; then
-    mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" \) -print0 | sort -z)
+    mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.gif" \) -print0 | sort -z)
 else
-    mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR/$SELECTED_FOLDER" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" \) -print0 | sort -z)
+    mapfile -d '' -t WALLPAPER_PATHS < <(find "$WALLPAPER_DIR/$SELECTED_FOLDER" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.gif" \) -print0 | sort -z)
 fi
 
 selected_wallpaper="${WALLPAPER_PATHS[$SELECTED_INDEX]}"
 [[ -z "$selected_wallpaper" ]] && echo "No wallpaper selected or index invalid" >&2 && exit 1
 
-# Apply the wallpaper with sweeping diagonal transition
+# Apply the wallpaper
 if [[ -f "$selected_wallpaper" ]]; then
     echo "$SELECTED_INDEX" > "$CACHE_FILE"
 
-    swww img "$selected_wallpaper" \
-        --transition-type wipe \
-        --transition-angle 45 \
-        --transition-pos "$(hyprctl cursorpos)" \
-        --transition-fps 60 \
+    # Common transition options
+    TRANSITION_OPTS=(
+        --transition-type wipe
+        --transition-angle 45
+        --transition-pos "$(hyprctl cursorpos)"
+        --transition-fps 60
         --transition-step 90
+    )
 
-    wal -i "$selected_wallpaper"
-    killall waybar
-    waybar & waybar -c ~/.config/waybar/utility-bar/config.jsonc -s ~/.config/waybar/utility-bar/style.css
+    # Ensure swww-daemon is running (new method)
+    if ! pgrep -x "swww-daemon" >/dev/null; then
+        swww-daemon &
+        sleep 0.5
+    fi
+    
+    # Apply wallpaper (swww now automatically detects GIFs)
+    swww img "$selected_wallpaper" "${TRANSITION_OPTS[@]}"
 
+    # Apply colors and restart waybar
+    wal -i "$selected_wallpaper" || true
+    killall waybar || true
+    waybar & 
+    waybar -c ~/.config/waybar/utility-bar/config.jsonc -s ~/.config/waybar/utility-bar/style.css &
 fi
