@@ -32,7 +32,7 @@
     "custom/Update":
     {
         "format": "",
-        "on-click": "alacritty -e sudo pacman -Syu"
+        "on-click": "alacritty -e bash -c ~/.local/bin/updsys; read -p 'Press enter to close...'"
 
     },
     
