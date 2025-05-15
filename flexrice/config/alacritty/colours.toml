@@ -1,9 +1,10 @@
-# ~/.config/alacritty/colors.toml
+import = ["~/.cache/wal/colors.toml"]
+
 [colors]
 # Gruvbox Dark (example)
 primary = {
-  background = "#282828",
-  foreground = "#ebdbb2",
+  background = "@background",
+  foreground = "@foreground",
 }
 
 cursor = {

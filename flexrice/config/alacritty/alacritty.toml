@@ -1,67 +1,39 @@
-[general]
-import = ["~/.cache/wal/colors-alacritty.toml"]
-live_config_reload = true
-# ===== Window Configuration =====
+[cursor]
+unfocused_hollow = false
+
+[cursor.style]
+shape = "Block"
+
+[env]
+TERM = "alacritty"
+WINIT_X11_SCALE_FACTOR = "1.0"
+
 [window]
-# Window dimensions (columns x rows)
-dimensions = { columns = 120, lines = 30 }
-
-# Window position (optional)
-position = { x = 100, y = 100 }
-
-# Padding (space between text and window border)
-padding = { x = 5, y = 5 }
-
-# Startup mode (options: Windowed, Maximized, Fullscreen)
-startup_mode = "Windowed"
-
-# Window decorations (options: Full, None, Transparent, Buttonless)
-decorations = "Full"
-
-# Dynamic title (shows current command)
 dynamic_title = true
+opacity = 0.8
 
-# Background opacity (0.0 transparent - 1.0 opaque)
-opacity = 0.9
+[window.padding]
+x = 30
+y = 30
 
-# ===== Scrolling =====
-[scrolling]
-# Number of lines to scroll at a time
-history = 10000
+[colors]
+draw_bold_text_with_bright_colors = false
 
-# Multiplier for scrolling speed
-multiplier = 3
-
-# ===== Font Configuration =====
 [font]
-# Default font family
-normal = { family = "Hack", style = "Regular" }
-bold = { family = "Hack", style = "Bold" }
-italic = { family = "Hack", style = "Italic" }
+size = 13
 
-# Font size (adjust as needed)
-size = 12.0
+[font.normal]
+family = "JetBrainsMono Nerd Font Mono"
+style = "medium"
 
-# Offset between glyphs (adjust if letters overlap)
-glyph_offset = { x = 0, y = 0 }
+[window.dimensions]
+columns = 80
+lines = 120
 
-# ===== Mouse Bindings =====
-[mouse]
-hide_when_typing = false
+[general]
+live_config_reload = true
+import = ["~/.cache/wal/colors-alacritty.toml"]
 
-# ===== Selection =====
-[selection]
-semantic_escape_chars = ",│`|:\"' ()[]{}<>"
-save_to_clipboard = true
 
-# ===== Bell (Audible/Visual Alert) =====
-[bell]
-animation = "EaseOutExpo"
-duration = 0
-color = "#ffffff"
 
-# ===== Terminal =====
-[terminal]
-# Shell to use (default: system login shell)
-shell = { program = "/bin/bash", args = ["--login"] }
 
