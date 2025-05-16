@@ -126,5 +126,4 @@ if [[ -f "$selected_wallpaper" ]]; then
     wal -i "$selected_wallpaper" || true
     killall waybar || true
     waybar & 
-    waybar -c ~/.config/waybar/utility-bar/config.jsonc -s ~/.config/waybar/utility-bar/style.css &
 fi
