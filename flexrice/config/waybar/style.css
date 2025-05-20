@@ -93,3 +93,119 @@ tooltip {
     border-radius: 8px;
     padding: 4px 8px;
 }
+
+@import "/home/zero/.cache/wal/colors-waybar.css";
+
+* 
+{
+border: none;
+font-family: "Hack", "Font Awesome 6 Free";
+font-size: 14.5px;
+font-weight: 500;
+}
+
+window#waybar 
+{
+    background-color: transparent;
+    color: @color2;
+    border-bottom: 0;
+}
+
+#custom-start-menu
+{
+    background-color: @foreground;
+    border-color: transparent;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0px 12px;
+}
+
+#custom-Update
+{
+    background-color: @foreground;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0 12px
+}
+
+#custom-power
+{
+    background-color: @foreground;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0 12px
+
+}
+
+#power-profiles-daemon
+{
+    background-color: @foreground;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0 12px
+}
+
+#power-profiles-daemon.performance
+{
+    background-color: @foreground;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0 12px
+}
+
+#power-profiles-daemon.balanced
+{
+    background-color: @foreground;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0 12px
+}
+
+#power-profiles-daemon.power-saver
+{
+    background-color: @foreground;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0 12px
+}
+
+#cpu
+{
+    background-color: rgba(40, 40, 40, 0.8);
+    color: @foreground;
+    border-radius: 12px;
+    padding: 0 12px
+}
+
+#memory
+{
+    background-color: rgba(40, 40, 40, 0.8);
+    color: @foreground;
+    border-radius: 12px;
+    padding: 0 12px
+}
+
+#custom-upload-git
+{
+    background-color: @foreground;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0 12px
+}
+
+#custom-update-db
+{
+    background-color: @foreground;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0 12px
+}
+
+#custom-girm-ss
+{
+    background: @foreground;
+    color: #000000;
+    border-radius: 12px;
+    padding: 0 12px
+
+}

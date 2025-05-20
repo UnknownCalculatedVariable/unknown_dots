@@ -3,8 +3,20 @@
     "position": "bottom",
     "height": 30,
     "spacing": 4,
-    "modules-left": ["clock"],
-    "modules-center": ["hyprland/workspaces"],
+    "modules-left": [
+
+    "custom/power",
+    "custom/Update",
+    "custom/update-db",
+    "custom/upload-git",
+    "custom/girm-ss",
+    "power-profiles-daemon",
+"clock"],
+    "modules-center": [
+        "cpu",
+        "hyprland/workspaces",
+
+        "memory"],
     "modules-right": [ "pulseaudio", "network", "power", "bluetooth"],
     
     "hyprland/workspaces": {
@@ -62,7 +74,69 @@
         "format": "",
         "on-click": "blueman-manager"
     },
+
+    "custom/Update":
+    {
+        "format": "",
+        "on-click": "alacritty -e bash -c ~/.local/bin/updsys; read -p 'Press enter to close...'"
+
+    },
     
+    "custom/power":
+    {
+        "format": "",
+        "on-click": "wlogout"
+    },
+
+    "power-profiles-daemon": 
+    {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "format-icons":
+         {
+        "default": "",
+        "performance": "",
+        "balanced": "",
+        "power-saver": ""
+         }
+    },
+
+    "custom/girm-ss":
+    {
+        "format": "",
+        "on-click": "~/.local/bin/ss"
+
+    },
+
+    "cpu": 
+    {
+    "interval": 2,
+    "format": "{}% ",
+    "max-length": 10
+    },
+
+    "memory": 
+    {
+    "interval": 30,
+    "format": "{}% ",
+    "max-length": 10
+    },
+
+    "custom/upload-git":
+    {
+        "format": "",
+        "on-click": "alacritty -e bash -c ~/.local/bin/bckp; read -p 'Press enter to close...'"
+
+    },
+
+
+    "custom/update-db":
+    {
+        "format": "",
+        "on-click": "alacritty -e distrobox-upgrade -a"
+    },
+ 
     "power": {
         "format": "⏻",
         "on-click": "rofi -show power-menu -modi power-menu:rofi-power-menu",
