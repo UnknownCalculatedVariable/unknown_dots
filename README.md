@@ -5,7 +5,7 @@ ___Hyprland dots___ – Wallpaper-driven dynamic theming.
 
 ## IMPORTANT: Please back-up your current configuration before installing mine.
 
-### Link: https://drive.google.com/file/d/15Xsu7S7XPHIidaQNKvhZfngtNQLUtGcB/view?usp=drive_link
+### Link: https://www.mediafire.com/file/5civlk0944bp7yr/wpbckp.zip/file
 
 # How to install:
 
